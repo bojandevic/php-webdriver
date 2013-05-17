@@ -18,9 +18,10 @@
 
 require_once 'WebElement.php';
 require_once 'WebDriverException.php';
-require_once 'NoSuchElementException.php';
 
-class WebDriverBase {
+class WebDriverBase
+{
+	const SUCCESS = 0;
 
 	protected $requestURL;
 	protected $_curl;
@@ -117,19 +118,8 @@ class WebDriverBase {
 	 * @param string $json_response
 	 */
 	protected function handleResponse($json_response) {
-		$status = $json_response->{'status'};
-		switch ($status) {
-			case WebDriverException::SUCCESS:
-				return;
-			break;
-			case WebDriverException::NO_SUCH_ELEMENT:
-				throw new NoSuchElementException($json_response);
-			break;
-			default:
-				print_r($json_response);
-				throw new WebDriverException($status, 99, null);
-			break;
-		}
+		if ($json_response->{'status'} != self::SUCCESS)
+			throw new WebDriverException($status, 99, null);
 	}
 
 	/**

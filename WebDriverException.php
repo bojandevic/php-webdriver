@@ -5,7 +5,6 @@
  */
 class WebDriverException extends Exception
 {
-	const SUCCESS 	                 = 0;  //The command executed successfully.
 	const NO_SUCH_ELEMENT 	        = 7;  //An element could not be located on the page using the given search parameters.
 	const NO_SUCH_FRAME 	           = 8;  //A request to switch to a frame could not be satisfied because the frame could not be found.
 	const UNKNOWN_COMMAND 	        = 9;  //The requested resource could not be found, or a request was received using an HTTP method that is not supported by the mapped resource.
