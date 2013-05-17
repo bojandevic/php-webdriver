@@ -34,21 +34,23 @@ class WebElement extends WebDriverBase {
         }
         $request = $this->requestURL . "/value";
         $session = $this->curlInit($request);
-        $args = array( 'value'=>$value );
-        $postargs =json_encode($args);
+
+        $postargs = json_encode(array('value' => $value));
         $this->preparePOST($session, $postargs);
         $response = trim(curl_exec($session));
     }
 
     public function getValue() {
-        $request = $this->requestURL . "/value";
+        $request  = $this->requestURL . "/value";
         $response = $this->execute_rest_request_GET($request);
+
         return $this->extractValueFromJsonResponse($response);
     }
 
     public function clear() {
         $request = $this->requestURL . "/clear";
         $session = $this->curlInit($request);
+
         $this->preparePOST($session, null);
         $response = trim(curl_exec($session));
     }
@@ -56,6 +58,7 @@ class WebElement extends WebDriverBase {
     public function click() {
         $request = $this->requestURL . "/click";
         $session = $this->curlInit($request);
+
         $this->preparePOST($session, null);
         $response = trim(curl_exec($session));
     }
@@ -63,24 +66,27 @@ class WebElement extends WebDriverBase {
     public function submit() {
         $request = $this->requestURL . "/submit";
         $session = $this->curlInit($request);
+
         $this->preparePOST($session, "");
         $response = trim(curl_exec($session));
     }
 
     public function getText() {
-        $request = $this->requestURL . "/text";
+        $request  = $this->requestURL . "/text";
         $response = $this->execute_rest_request_GET($request);
+
         return $this->extractValueFromJsonResponse($response);
     }
 
     public function getName() {
-        $request = $this->requestURL . "/name";
+        $request  = $this->requestURL . "/name";
         $response = $this->execute_rest_request_GET($request);
+
         return $this->extractValueFromJsonResponse($response);
     }
-	
+
     /**
-     * Get the value of a the given attribute of the element. 
+     * Get the value of a the given attribute of the element.
      */
     public function getAttribute($attribute) {
     	$request = $this->requestURL . '/attribute/'.$attribute;
@@ -102,7 +108,7 @@ class WebElement extends WebDriverBase {
 
     /**
      * Select an OPTION element, or an INPUT element of type checkbox or radiobutton.
-     * 
+     *
      */
     public function setSelected() {
     $this->click(); //setSelected is now deprecated
@@ -111,22 +117,22 @@ class WebElement extends WebDriverBase {
 
     /**
      * find OPTION by text in combobox
-     * 
+     *
      */
     public function findOptionElementByText($text) {
-        $option = $this->findElementBy(LocatorStrategy::xpath, 'option[normalize-space(text())="'.$text.'"]');
+        $option = $this->findElementBy(WebDriver::LOCATOR_XPATH, 'option[normalize-space(text())="'.$text.'"]');
         return $option;
     }
 
     /**
      * find OPTION by value in combobox
-     * 
+     *
      */
     public function findOptionElementByValue($val) {
-        $option = $this->findElementBy(LocatorStrategy::xpath, 'option[@value="'.$val.'"]');
+        $option = $this->findElementBy(WebDriver::LOCATOR_XPATH, 'option[@value="'.$val.'"]');
         return $option;
     }
-   
+
 
     /**
      * Determine if an element is currently enabled
@@ -139,8 +145,8 @@ class WebElement extends WebDriverBase {
         return ($isSelected == 'true');
     }
 
-    
-     /**
+
+    /**
      * Determine if an element is currently displayed.
      * @return boolean Whether the element is displayed.
      */
@@ -151,8 +157,8 @@ class WebElement extends WebDriverBase {
         return ($isDisplayed == 'true');
     }
 
-        
-     /**
+
+    /**
      * Determine an element's size in pixels. The size will be returned as a JSON object with width and height properties.
      * @return width:number,height:number The width and height of the element, in pixels.
      */
@@ -164,9 +170,9 @@ class WebElement extends WebDriverBase {
         return $sizeValues;
     }
 
-    
-     /**
-     * Query the value of an element's computed CSS property. The CSS property to query should be specified using 
+
+    /**
+     * Query the value of an element's computed CSS property. The CSS property to query should be specified using
      * the CSS property name, not the JavaScript property name (e.g. background-color instead of backgroundColor).
      * @return string The value of the specified CSS property.
      */
@@ -176,9 +182,9 @@ class WebElement extends WebDriverBase {
         $propertyValue = $this->extractValueFromJsonResponse($response);
         return $propertyValue;
     }
-    
-    
-     /**
+
+
+    /**
      * Test if two element IDs refer to the same DOM element.
      * @return boolean Whether the two IDs refer to the same element.
      */
@@ -190,10 +196,10 @@ class WebElement extends WebDriverBase {
         return ($isOther == 'true');
 
     }
-    
-    
-     /**
-     * Determine an element's location on the page. The point (0, 0) refers to the upper-left corner of the page. 
+
+
+    /**
+     * Determine an element's location on the page. The point (0, 0) refers to the upper-left corner of the page.
      * The element's coordinates are returned as a JSON object with x and y properties.
      * @return x:number, y:number The X and Y coordinates for the element on the page.
      */
@@ -205,9 +211,9 @@ class WebElement extends WebDriverBase {
         return $location;
 
     }
-    
-    
-     /**
+
+
+    /**
      * Determine an element's location on the screen once it has been scrolled into view.
      * The element's coordinates are returned as a JSON object with x and y properties.
      * @return x:number, y:number The X and Y coordinates for the element.

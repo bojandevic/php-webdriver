@@ -12,12 +12,11 @@ Example
 <pre>
 <code>
    require_once "WebDriver.php";
-   require("LocatorStrategy.php");
 
    $webdriver = new WebDriver("localhost", "4444");
    $webdriver->connect("firefox");                            
    $webdriver->get("http://google.com");
-   $element = $webdriver->findElementBy(LocatorStrategy::name, "q");
+   $element = $webdriver->findElementBy(WebDriver::LOCATOR_NAME, "q");
    $element->sendKeys(array("selenium google code" ) );
    $element->submit();
 
@@ -28,7 +27,7 @@ Example
 <pre>
 <code>
    $this->webdriver->get($this->test_url);
-   $element = $this->webdriver->findElementBy(LocatorStrategy::name, "sel1");
+   $element = $this->webdriver->findElementBy(WebDriver::LOCATOR_NAME, "sel1");
    $option3 = $element->findOptionElementByText("option 3");
    $option3->click();
    $this->assertTrue($option3->isSelected());
