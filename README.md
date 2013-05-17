@@ -11,8 +11,8 @@ Example
 -------
 <pre>
 <code>
-require_once "phpwebdriver/WebDriver.php";
-require("phpwebdriver/LocatorStrategy.php");
+require_once "WebDriver.php";
+require("LocatorStrategy.php");
 
 $webdriver = new WebDriver("localhost", "4444");
 $webdriver->connect("firefox");                            
@@ -24,19 +24,19 @@ $element->submit();
 $webdriver->close();
 </code>
 </pre>
-###combobox handling###
+###Combobox handling###
 <pre>
 <code>
-$this->webdriver->get($this->test_url);
-$element = $this->webdriver->findElementBy(LocatorStrategy::name, "sel1");
-$option3 = $element->findOptionElementByText("option 3");
-$option3->click();
-$this->assertTrue($option3->isSelected());
+   $this->webdriver->get($this->test_url);
+   $element = $this->webdriver->findElementBy(LocatorStrategy::name, "sel1");
+   $option3 = $element->findOptionElementByText("option 3");
+   $option3->click();
+   $this->assertTrue($option3->isSelected());
 
-$option2 = $element->findOptionElementByValue("2");
-$option2->click();
-$this->assertFalse($option3->isSelected());
-$this->assertTrue($option2->isSelected());
+   $option2 = $element->findOptionElementByValue("2");
+   $option2->click();
+   $this->assertFalse($option3->isSelected());
+   $this->assertTrue($option2->isSelected());
 </code>
 </pre>
 ###Use your existing Selenium1 tests (also generated with Selenium IDE)###
@@ -51,7 +51,7 @@ class WebTestCase extends CWebDriverTestCase
         $this->setBrowserUrl('http://yourapp123.com');
     }
 
-        /** generate screenshot if any test has failed */
+    /** generate screenshot if any test has failed */
     protected function tearDown()
     {
         if( $this->hasFailed() ) {
