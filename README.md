@@ -11,17 +11,17 @@ Example
 -------
 <pre>
 <code>
-require_once "WebDriver.php";
-require("LocatorStrategy.php");
+   require_once "WebDriver.php";
+   require("LocatorStrategy.php");
 
-$webdriver = new WebDriver("localhost", "4444");
-$webdriver->connect("firefox");                            
-$webdriver->get("http://google.com");
-$element = $webdriver->findElementBy(LocatorStrategy::name, "q");
-$element->sendKeys(array("selenium google code" ) );
-$element->submit();
+   $webdriver = new WebDriver("localhost", "4444");
+   $webdriver->connect("firefox");                            
+   $webdriver->get("http://google.com");
+   $element = $webdriver->findElementBy(LocatorStrategy::name, "q");
+   $element->sendKeys(array("selenium google code" ) );
+   $element->submit();
 
-$webdriver->close();
+   $webdriver->close();
 </code>
 </pre>
 ###Combobox handling###
