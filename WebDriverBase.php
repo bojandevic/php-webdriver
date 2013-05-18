@@ -26,14 +26,14 @@ class WebDriverBase
 	protected $requestURL;
 	protected $_curl;
 
-	public function __construct($_seleniumUrl) {
-		$this->requestURL = $_seleniumUrl;
+	public function __construct($requestURL) {
+		$this->requestURL = $requestURL;
 	}
 
-	protected function &curlInit( $url ) {
-		if( $this->_curl === null ) {
+	protected function &curlInit($url) {
+		if( $this->_curl === null )
 			$this->_curl = curl_init( $url );
-		} else {
+		else {
 			curl_setopt( $this->_curl, CURLOPT_HTTPGET, true );
 			curl_setopt( $this->_curl, CURLOPT_URL, $url );
 		}
@@ -160,8 +160,7 @@ class WebDriverBase
 	 * @return array of WebElement
 	 */
 	public function findElementsBy($locatorStrategy, $value) {
-		$request  = $this->requestURL . "/elements";
-		$session  = $this->curlInit($request);
+		$session  = $this->curlInit($this->requestURL . "/elements");
 		$postargs = json_encode(array('using' => $locatorStrategy, 'value' => $value));
 
 		$this->preparePOST($session, $postargs);
