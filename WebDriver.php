@@ -41,23 +41,19 @@ class WebDriver extends WebDriverBase
 	 * @param $version 	The browser version, or the empty string if unknown.
 	 * @param $caps  array with capabilities see: http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session
 	 */
-	public function connect($browserName="firefox", $version="", $caps=array()) {
-		$request = $this->requestURL . "/session";
-		$session = $this->curlInit($request);
+	public function connect($browserName = "firefox", $version = "", $caps = array()) {
+		$session = $this->curlInit($this->requestURL . "/session");
 
 		$allCaps = array_merge(array('javascriptEnabled' => true,
-					  						  'nativeEvents'      =>false),
-									  $caps,
-									  array('browserName' =>$browserName,
-									  		  'version'     =>$version));
+											  'nativeEvents'      => false,
+											  'browserName'       => $browserName
+											  'version'           => $version),
+									  $caps);
 
-		$params   = array( 'desiredCapabilities' =>	$allCaps );
-		$postargs = json_encode($params);
-
-		$this->preparePOST($session, $postargs);
+		$this->preparePOST($session, json_encode(array('desiredCapabilities' => $allCaps)));
 		curl_setopt($session, CURLOPT_HEADER, true);
+		curl_exec($session);
 
-		$response = curl_exec($session);
 		$header   = curl_getinfo($session);
 
 		$this->requestURL = $header['url'];
@@ -66,9 +62,9 @@ class WebDriver extends WebDriverBase
 	/**
 	 * Delete the session.
 	 */
-	public function close() {
-		$request = $this->requestURL;
-		$session = $this->curlInit($request);
+	public function close()
+	{
+		$session = $this->curlInit($this->requestURL);
 
 		$this->prepareDELETE($session);
 		$response = curl_exec($session);
@@ -78,9 +74,9 @@ class WebDriver extends WebDriverBase
 	 /**
 	 * Refresh the current page.
 	 */
-	public function refresh() {
-		$request = $this->requestURL . "/refresh";
-		$session = $this->curlInit($request);
+	public function refresh()
+	{
+		$session = $this->curlInit($this->requestURL . "/refresh");
 
 		$this->preparePOST($session, null);
 		curl_exec($session);
@@ -89,9 +85,9 @@ class WebDriver extends WebDriverBase
 	/**
 	 * Navigate forwards in the browser history, if possible.
 	 */
-	public function forward() {
-		$request = $this->requestURL . "/forward";
-		$session = $this->curlInit($request);
+	public function forward()
+	{
+		$session = $this->curlInit($this->requestURL . "/forward");
 
 		$this->preparePOST($session, null);
 		curl_exec($session);
@@ -100,9 +96,9 @@ class WebDriver extends WebDriverBase
 	/**
 	 * Navigate backwards in the browser history, if possible.
 	 */
-	public function back() {
-		$request = $this->requestURL . "/back";
-		$session = $this->curlInit($request);
+	public function back()
+	{
+		$session = $this->curlInit($this->requestURL . "/back");
 
 		$this->preparePOST($session, null);
 		curl_exec($session);
@@ -112,7 +108,8 @@ class WebDriver extends WebDriverBase
 	 * Get the element on the page that currently has focus.
 	 * @return JSON object WebElement.
 	 */
-	public function getActiveElement() {
+	public function getActiveElement()
+	{
 		$response = $this->execute_rest_request_GET($this->requestURL . "/element/active");
 		return $this->extractValueFromJsonResponse($response);
 	}
@@ -120,9 +117,9 @@ class WebDriver extends WebDriverBase
 	/**
 	 * Change focus to another frame on the page. If the frame ID is null, the server should switch to the page's default content.
 	 */
-	public function focusFrame($frameId) {
-		$request = $this->requestURL . "/frame";
-		$session = $this->curlInit($request);
+	public function focusFrame($frameId)
+	{
+		$session = $this->curlInit($this->requestURL . "/frame");
 		$args    = array('id' => $frameId);
 
 		$this->preparePOST($session, json_encode($args));
@@ -133,9 +130,9 @@ class WebDriver extends WebDriverBase
 	 * Navigate to a new URL
 	 * @param string $url The URL to navigate to.
 	 */
-	public function get($url) {
-		$request = $this->requestURL . "/url";
-		$session = $this->curlInit($request);
+	public function get($url)
+	{
+		$session = $this->curlInit($this->requestURL . "/url");
 		$args    = array('url' => $url);
 
 		$this->preparePOST($session, json_encode($args));
@@ -146,7 +143,8 @@ class WebDriver extends WebDriverBase
 	 * Get the current page url.
 	 * @return string The current URL.
 	 */
-	public function getCurrentUrl() {
+	public function getCurrentUrl()
+	{
 		$response = $this->execute_rest_request_GET($this->requestURL . "/url");
 		return $this->extractValueFromJsonResponse($response);
 	}
@@ -155,7 +153,8 @@ class WebDriver extends WebDriverBase
 	 * Get the current page title.
 	 * @return string current page title
 	 */
-	public function getTitle() {
+	public function getTitle()
+	{
 		$response = $this->execute_rest_request_GET($this->requestURL . "/title");
 		return $this->extractValueFromJsonResponse($response);
 	}
@@ -164,7 +163,8 @@ class WebDriver extends WebDriverBase
 	 * Get the current page source.
 	 * @return string page source
 	 */
-	public function getPageSource() {
+	public function getPageSource()
+	{
 		$request  = $this->requestURL . "/source";
 		$response = $this->execute_rest_request_GET($request);
 		return $this->extractValueFromJsonResponse($response);
@@ -175,20 +175,18 @@ class WebDriver extends WebDriverBase
 	 * How these constants map to actual input speed is still browser specific and not covered by the wire protocol.
 	 * @return string {SLOW|MEDIUM|FAST}
 	 */
-	public function getSpeed() {
-		$request  = $this->requestURL . "/speed";
-		$response = $this->execute_rest_request_GET($request);
+	public function getSpeed()
+	{
+		$response = $this->execute_rest_request_GET($this->requestURL . "/speed");
 		return $this->extractValueFromJsonResponse($response);
 	}
 
-	public function setSpeed($speed) {
-		$request  = $this->requestURL . "/speed";
-		$session  = $this->curlInit($request);
-		$args     = array('speed' => $speed);
-		$jsonData = json_encode($args);
+	public function setSpeed($speed)
+	{
+		$session  = $this->curlInit($this->requestURL . "/speed");
+		$jsonData = json_encode(array('speed' => $speed));
 
-		$this->preparePOST($session, $jsonData);
-		$response = curl_exec($session);
+		$response = curl_exec($this->preparePOST($session, $jsonData));
 		return $this->extractValueFromJsonResponse($response);
 	}
 
@@ -197,24 +195,24 @@ class WebDriver extends WebDriverBase
 	 * Change focus to another window. The window to change focus to may be specified
 	 * by its server assigned window handle, or by the value of its name attribute.
 	 */
-	public function selectWindow($windowName) {
-		$request = $this->requestURL . "/window";
-		$session = $this->curlInit($request);
-		$args = array('name' => $windowName);
-		$jsonData = json_encode($args);
-		$this->preparePOST($session, $jsonData);
-		$response = curl_exec($session);
+	public function selectWindow($windowName)
+	{
+		$session  = $this->curlInit($this->requestURL . "/window");
+		$jsonData = json_encode(array('name' => $windowName));
+
+		$response = curl_exec($this->preparePOST($session, $jsonData));
 		return $this->extractValueFromJsonResponse($response);
 	}
 
 	/**
 	 * Close the current window.
 	 */
-	public function closeWindow() {
+	public function closeWindow()
+	{
 		$request = $this->requestURL . "/window";
 		$session = $this->curlInit($request);
-		$this->prepareDELETE($session);
-		$response = curl_exec($session);
+
+		$response = curl_exec($this->prepareDELETE($session));
 		$this->curlClose();
 	}
 
@@ -222,7 +220,8 @@ class WebDriver extends WebDriverBase
 	 * Retrieve all cookies visible to the current page.
 	 * @return array array with all cookies
 	 */
-	public function getAllCookies() {
+	public function getAllCookies()
+	{
 		$response = $this->execute_rest_request_GET($this->requestURL . "/cookie");
 		return $this->extractValueFromJsonResponse($response);
 	}
@@ -230,7 +229,8 @@ class WebDriver extends WebDriverBase
 	/**
 	 * Set a cookie.
 	 */
-	public function setCookie($name, $value, $cookie_path='/', $domain='', $secure=false, $expiry='') {
+	public function setCookie($name, $value, $cookie_path = '/', $domain = '', $secure = false, $expiry = '')
+	{
 		$request = $this->requestURL . "/cookie";
 		$session = $this->curlInit($request);
 		$cookie = array('name'=>$name, 'value'=>$value, 'secure'=>$secure);
@@ -248,22 +248,20 @@ class WebDriver extends WebDriverBase
 	/**
 	 *Delete the cookie with the given name. This command should be a no-op if there is no such cookie visible to the current page.
 	 */
-	public function deleteCookie($name) {
-		$request = $this->requestURL . "/cookie/".$name;
-		$session = $this->curlInit($request);
-		$this->prepareDELETE($session);
-		$response = curl_exec($session);
+	public function deleteCookie($name)
+	{
+		$session  = $this->curlInit($this->requestURL . "/cookie/" . $name);
+		$response = curl_exec($this->prepareDELETE($session));
 		$this->curlClose();
 	}
 
 	/**
 	 *	Delete all cookies visible to the current page.
 	 */
-	public function deleteAllCookies() {
-		$request = $this->requestURL . "/cookie";
-		$session = $this->curlInit($request);
-		$this->prepareDELETE($session);
-		$response = curl_exec($session);
+	public function deleteAllCookies()
+	{
+		$session  = $this->curlInit($this->requestURL . "/cookie");
+		$response = curl_exec($this->prepareDELETE($session));
 		$this->curlClose();
 	}
 
@@ -272,7 +270,8 @@ class WebDriver extends WebDriverBase
 	 * Gets the text of the currently displayed JavaScript alert(), confirm(), or prompt() dialog.
 	 * @return string The text of the currently displayed alert.
 	 */
-	public function getAlertText() {
+	public function getAlertText()
+	{
 		$response = $this->execute_rest_request_GET($this->requestURL . "/alert_text");
 		return $this->extractValueFromJsonResponse($response);
 	}
@@ -280,13 +279,12 @@ class WebDriver extends WebDriverBase
 	/**
 	 * Sends keystrokes to a JavaScript prompt() dialog.
 	 */
-	public function sendAlertText($text) {
-		$request = $this->requestURL . "/alert_text";
-		$session = $this->curlInit($request);
-		$args = array('keysToSend' => $text);
-		$jsonData = json_encode($args);
-		$this->preparePOST($session, $jsonData);
-		$response = curl_exec($session);
+	public function sendAlertText($text)
+	{
+		$session  = $this->curlInit($this->requestURL . "/alert_text");
+		$jsonData = json_encode(array('keysToSend' => $text));
+
+		$response = curl_exec($this->preparePOST($session, $jsonData));
 		return $this->extractValueFromJsonResponse($response);
 	}
 
@@ -294,7 +292,8 @@ class WebDriver extends WebDriverBase
 	 * Get the current browser orientation. The server should return a valid orientation value as defined in ScreenOrientation: LANDSCAPE|PORTRAIT.
 	 * @return string The current browser orientation corresponding to a value defined in ScreenOrientation: LANDSCAPE|PORTRAIT.
 	 */
-	public function getOrientation() {
+	public function getOrientation()
+	{
 		$response = $this->execute_rest_request_GET($this->requestURL . "/orientation");
 		return $this->extractValueFromJsonResponse($response);
 	}
@@ -302,11 +301,11 @@ class WebDriver extends WebDriverBase
 	/**
 	 * Set the browser orientation. The orientation should be specified as defined in ScreenOrientation: LANDSCAPE|PORTRAIT.
 	 */
-	public function setOrientation($orientation) {
-		$request = $this->requestURL . "/orientation";
-		$session = $this->curlInit($request);
-		$args = array('orientation' => $orientation);
-		$jsonData = json_encode($args);
+	public function setOrientation($orientation)
+	{
+		$session  = $this->curlInit($this->requestURL . "/orientation");
+		$jsonData = json_encode(array('orientation' => $orientation));
+
 		$this->preparePOST($session, $jsonData);
 		curl_exec($session);
 	}
@@ -314,11 +313,11 @@ class WebDriver extends WebDriverBase
 	/**
 	 * Accepts the currently displayed alert dialog. Usually, this is equivalent to clicking on the 'OK' button in the dialog.
 	 */
-	public function acceptAlert() {
-		$request = $this->requestURL . "/accept_alert";
-		$session = $this->curlInit($request);
-	$this->preparePOST($session, '');
-		$response = curl_exec($session);
+	public function acceptAlert()
+	{
+		$session = $this->curlInit($this->requestURL . "/accept_alert");
+
+		$response = curl_exec($this->preparePOST($session, ''));
 		return $this->extractValueFromJsonResponse($response);
 	}
 
@@ -326,11 +325,11 @@ class WebDriver extends WebDriverBase
 	 * Dismisses the currently displayed alert dialog. For confirm() and prompt() dialogs,
 	 *	this is equivalent to clicking the 'Cancel' button. For alert() dialogs, this is equivalent to clicking the 'OK' button.
 	*/
-	public function dismissAlert() {
-		$request = $this->requestURL . "/dismiss_alert";
-		$session = $this->curlInit($request);
-	$this->preparePOST($session, '');
-		$response = curl_exec($session);
+	public function dismissAlert()
+	{
+		$session = $this->curlInit($this->requestURL . "/dismiss_alert");
+
+		$response = curl_exec($this->preparePOST($session, ''));
 		return $this->extractValueFromJsonResponse($response);
 	}
 
@@ -340,13 +339,12 @@ class WebDriver extends WebDriverBase
 	 * is returned to the client.
 	 * @return Object result of evaluating the script is returned to the client.
 	 */
-	public function execute($script, $script_args) {
-		$request = $this->requestURL . "/execute";
-		$session = $this->curlInit($request);
-		$args = array('script' => $script, 'args' => $script_args);
-		$jsonData = json_encode($args);
-		$this->preparePOST($session, $jsonData);
-		$response = curl_exec($session);
+	public function execute($script, $scripArgs)
+	{
+		$session = $this->curlInit($this->requestURL . "/execute");
+		$jsonData = json_encode(array('script' => $script, 'args' => $scripArgs));
+
+		$response = curl_exec($this->preparePOST($session, $jsonData));
 		return $this->extractValueFromJsonResponse($response);
 	}
 
@@ -356,13 +354,12 @@ class WebDriver extends WebDriverBase
 	 * is returned to the client.
 	 * @return Object result of evaluating the script is returned to the client.
 	 */
-	public function executeScript($script, $script_args) {
-		$request = $this->requestURL . "/execute";
-		$session = $this->curlInit($request);
-		$args = array('script' => $script, 'args' => $script_args);
-		$jsonData = json_encode($args);
-		$this->preparePOST($session, $jsonData);
-		$response = curl_exec($session);
+	public function executeScript($script, $scripArgs)
+	{
+		$session  = $this->curlInit($this->requestURL . "/execute");
+		$jsonData = json_encode(array('script' => $script, 'args' => $scripArgs));
+
+		$response = curl_exec($this->preparePOST($session, $jsonData));
 		return $this->extractValueFromJsonResponse($response);
 	}
 
@@ -374,13 +371,13 @@ class WebDriver extends WebDriverBase
 	 * to the function. The value to this callback will be returned to the client.
 	 * @return Object result of evaluating the script is returned to the client.
 	 */
-	public function executeAsyncScript($script, $script_args) {
-		$request = $this->requestURL . "/execute_async";
-		$session = $this->curlInit($request);
-		$args = array('script' => $script, 'args' => $script_args);
-		$jsonData = json_encode($args);
-		$this->preparePOST($session, $jsonData);
-		$response = curl_exec($session);
+	public function executeAsyncScript($script, $scripArgs)
+	{
+		$session  = $this->curlInit($this->requestURL . "/execute_async");
+		$jsonData = json_encode(array('script' => $script, 'args' => $scripArgs));
+
+		$response = curl_exec($this->preparePOST($session, $jsonData));
+
 		return $this->extractValueFromJsonResponse($response);
 	}
 
@@ -388,21 +385,22 @@ class WebDriver extends WebDriverBase
 	 * Take a screenshot of the current page.
 	 * @return string The screenshot as a base64 encoded PNG.
 	 */
-	public function getScreenshot() {
-		$request = $this->requestURL . "/screenshot";
-		$response = $this->execute_rest_request_GET($request);
+	public function getScreenshot()
+	{
+		$response = $this->execute_rest_request_GET($this->requestURL . "/screenshot";);
 		return $this->extractValueFromJsonResponse($response);
 	}
 
 	/**
 	 * Take a screenshot of the current page and saves it to png file.
-	 * @param $png_filename filename (with path) where file has to be saved
+	 * @param $pngFileName filename (with path) where file has to be saved
 	 * @return bool result of operation (false if failure)
 	 */
-	public function getScreenshotAndSaveToFile($png_filename) {
-		$img = $this->getScreenshot();
-		$data = base64_decode($img);
-		$success = file_put_contents($png_filename, $data);
+	public function getScreenshotAndSaveToFile($pngFileName)
+	{
+		$data = base64_decode($this->getScreenshot());
+
+		return file_put_contents($pngFileName, $data);
 	}
 }
 
