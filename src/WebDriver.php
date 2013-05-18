@@ -1,8 +1,6 @@
 <?php
 
 require_once 'WebDriverBase.php';
-require_once 'WebElement.php';
-require_once 'WebDriverException.php';
 
 class WebDriver extends WebDriverBase
 {
@@ -215,16 +213,23 @@ class WebDriver extends WebDriverBase
     */
    public function setCookie($name, $value, $cookie_path = '/', $domain = '', $secure = false, $expiry = '')
    {
-      $request = $this->requestURL . "/cookie";
-      $session = $this->curlInit($request);
-      $cookie = array('name'=>$name, 'value'=>$value, 'secure'=>$secure);
-      if (!empty($cookie_path)) $cookie['path']=$cookie_path;
-      if (!empty($domain)) $cookie['domain']=$domain;
-      if (!empty($expiry)) $cookie['expiry']=$expiry;
-      $args = array('cookie' => $cookie );
-      $jsonData = json_encode($args);
-      $this->preparePOST($session, $jsonData);
-      $response = curl_exec($session);
+      $session = $this->curlInit($this->requestURL . "/cookie");
+      $cookie  = array('name'   => $name,
+                       'value'  => $value,
+                       'secure' => $secure);
+
+      if (!empty($cookie_path))
+         $cookie['path']=$cookie_path;
+
+      if (!empty($domain))
+         $cookie['domain']=$domain;
+
+      if (!empty($expiry))
+         $cookie['expiry']=$expiry;
+
+      $jsonData = json_encode(array('cookie' => $cookie));
+      $response = curl_exec($this->preparePOST($session, $jsonData));
+
       return $this->extractValueFromJsonResponse($response);
    }
 
@@ -236,6 +241,7 @@ class WebDriver extends WebDriverBase
    {
       $session  = $this->curlInit($this->requestURL . "/cookie/" . $name);
       $response = curl_exec($this->prepareDELETE($session));
+
       $this->curlClose();
    }
 
@@ -246,6 +252,7 @@ class WebDriver extends WebDriverBase
    {
       $session  = $this->curlInit($this->requestURL . "/cookie");
       $response = curl_exec($this->prepareDELETE($session));
+
       $this->curlClose();
    }
 
