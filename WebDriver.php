@@ -32,7 +32,7 @@ class WebDriver extends WebDriverBase
 	const LOCATOR_XPATH             = "xpath";
 
 	public function __construct($host, $port) {
-		parent::__construct("http://" . $host . ":" . $port . "/wd/hub");
+		parent::__construct("http://{$host}:{$port}/wd/hub");
 	}
 
 	/**
@@ -40,7 +40,7 @@ class WebDriver extends WebDriverBase
 	 * @param $browserName The name of the browser being used; should be one of {chrome|firefox|htmlunit|internet explorer|iphone}.
 	 * @param $version 	The browser version, or the empty string if unknown.
 	 * @param $caps  array with capabilities see: http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session
-	*/
+	 */
 	public function connect($browserName="firefox", $version="", $caps=array()) {
 		$request = $this->requestURL . "/session";
 		$session = $this->curlInit($request);

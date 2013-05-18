@@ -95,31 +95,17 @@ class WebDriverBase
 	}
 
 	/**
-	 * Function checks if there was error in last command excecution.
-	 * If there was an error - new Exception is thrown.
-	 * @param Curl_session $session
-	 */
-	protected function handleError($session, $response) {
-		$last_error = curl_errno($session);
-		print_r('last_error = ' . $last_error);
-		if ($last_error == 500) { // selenium error
-			print_r($response);
-			throw new WebDriverException($message, $code, $previous);
-		} else
-		if ($last_error != 0) { // unknown error
-			print_r($response);
-			throw new WebDriverException($message, $code, $previous);
-		}
-	}
-
-	/**
 	 * Function analyses status attribute of the response.
 	 * For some statuses it throws exception (for example NoSuchElementException).
 	 * @param string $json_response
 	 */
 	protected function handleResponse($json_response) {
-		if ($json_response->{'status'} != self::SUCCESS)
-			throw new WebDriverException($status, 99, null);
+		if (($status = $json_response->{'status'}) != self::SUCCESS) {
+			if (array_key_exists($status, WebDriverException::$messages))
+				throw new WebDriverException(WebDriverException::$messages[$status], $status, null);
+			else
+				throw new WebDriverException('Unknown error occured', $status, null);
+		}
 	}
 
 	/**
@@ -174,19 +160,19 @@ class WebDriverBase
 	 * @return array of WebElement
 	 */
 	public function findElementsBy($locatorStrategy, $value) {
-		$request = $this->requestURL . "/elements";
-		$session = $this->curlInit($request);
-		//$postargs = "{'using':'" . $locatorStrategy . "', 'value':'" . $value . "'}";
-		$args = array('using' => $locatorStrategy, 'value' => $value);
-		$postargs = json_encode($args);
+		$request  = $this->requestURL . "/elements";
+		$session  = $this->curlInit($request);
+		$postargs = json_encode(array('using' => $locatorStrategy, 'value' => $value));
+
 		$this->preparePOST($session, $postargs);
-		$response = trim(curl_exec($session));
-		$json_response = json_decode($response);
-		$elements = $json_response->{'value'};
-		$webelements = array();
-		foreach ($elements as $key => $element) {
+
+		$json_response = json_decode(trim(curl_exec($session)));
+		$elements      = $json_response->{'value'};
+
+		$webelements   = array();
+		foreach ($elements as $key => $element)
 			$webelements[] = new WebElement($this, $element, null);
-		}
+
 		return $webelements;
 	}
 
@@ -199,9 +185,9 @@ class WebDriverBase
 	 */
 	public function extractValueFromJsonResponse($json) {
 		$json = json_decode(trim($json));
-		if ($json && isset($json->value)) {
+		if ($json && isset($json->value))
 			return $json->value;
-		}
+
 		return null;
 	}
 
