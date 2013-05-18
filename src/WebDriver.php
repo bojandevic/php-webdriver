@@ -92,7 +92,7 @@ class WebDriver extends WebDriverBase
     */
    public function getActiveElement()
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/element/active");
+      $response = $this->executeGET($this->requestURL . "/element/active");
       return $this->extractValueFromJsonResponse($response);
    }
 
@@ -127,7 +127,7 @@ class WebDriver extends WebDriverBase
     */
    public function getCurrentUrl()
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/url");
+      $response = $this->executeGET($this->requestURL . "/url");
       return $this->extractValueFromJsonResponse($response);
    }
 
@@ -137,7 +137,7 @@ class WebDriver extends WebDriverBase
     */
    public function getTitle()
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/title");
+      $response = $this->executeGET($this->requestURL . "/title");
       return $this->extractValueFromJsonResponse($response);
    }
 
@@ -148,7 +148,7 @@ class WebDriver extends WebDriverBase
    public function getPageSource()
    {
       $request  = $this->requestURL . "/source";
-      $response = $this->execute_rest_request_GET($request);
+      $response = $this->executeGET($request);
       return $this->extractValueFromJsonResponse($response);
    }
 
@@ -159,7 +159,7 @@ class WebDriver extends WebDriverBase
     */
    public function getSpeed()
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/speed");
+      $response = $this->executeGET($this->requestURL . "/speed");
       return $this->extractValueFromJsonResponse($response);
    }
 
@@ -204,7 +204,7 @@ class WebDriver extends WebDriverBase
     */
    public function getAllCookies()
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/cookie");
+      $response = $this->executeGET($this->requestURL . "/cookie");
       return $this->extractValueFromJsonResponse($response);
    }
 
@@ -263,7 +263,7 @@ class WebDriver extends WebDriverBase
     */
    public function getAlertText()
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/alert_text");
+      $response = $this->executeGET($this->requestURL . "/alert_text");
       return $this->extractValueFromJsonResponse($response);
    }
 
@@ -285,7 +285,7 @@ class WebDriver extends WebDriverBase
     */
    public function getOrientation()
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/orientation");
+      $response = $this->executeGET($this->requestURL . "/orientation");
       return $this->extractValueFromJsonResponse($response);
    }
 
@@ -378,7 +378,7 @@ class WebDriver extends WebDriverBase
     */
    public function getScreenshot()
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/screenshot";);
+      $response = $this->executeGET($this->requestURL . "/screenshot";);
       return $this->extractValueFromJsonResponse($response);
    }
 

@@ -28,7 +28,7 @@ class WebElement extends WebDriverBase
 
    public function getValue()
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/value");
+      $response = $this->executeGET($this->requestURL . "/value");
 
       return $this->extractValueFromJsonResponse($response);
    }
@@ -59,14 +59,14 @@ class WebElement extends WebDriverBase
 
    public function getText()
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/text");
+      $response = $this->executeGET($this->requestURL . "/text");
 
       return $this->extractValueFromJsonResponse($response);
    }
 
    public function getName()
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/name");
+      $response = $this->executeGET($this->requestURL . "/name");
 
       return $this->extractValueFromJsonResponse($response);
    }
@@ -76,7 +76,7 @@ class WebElement extends WebDriverBase
     */
    public function getAttribute($attribute)
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . '/attribute/' . $attribute);
+      $response = $this->executeGET($this->requestURL . '/attribute/' . $attribute);
       return $this->extractValueFromJsonResponse($response);
    }
 
@@ -87,7 +87,7 @@ class WebElement extends WebDriverBase
    public function isSelected()
    {
       $request = $this->requestURL . "/selected";
-      $response = $this->execute_rest_request_GET($request);
+      $response = $this->executeGET($request);
       $isSelected = $this->extractValueFromJsonResponse($response);
       return ($isSelected == 'true');
    }
@@ -127,7 +127,7 @@ class WebElement extends WebDriverBase
     */
    public function isEnabled()
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/enabled");
+      $response = $this->executeGET($this->requestURL . "/enabled");
 
       return ($this->extractValueFromJsonResponse($response) == 'true');
    }
@@ -139,7 +139,7 @@ class WebElement extends WebDriverBase
     */
    public function isDisplayed()
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/displayed");
+      $response = $this->executeGET($this->requestURL . "/displayed");
 
       return ($this->extractValueFromJsonResponse($response) == 'true');
    }
@@ -151,7 +151,7 @@ class WebElement extends WebDriverBase
     */
    public function getSize()
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/size");
+      $response = $this->executeGET($this->requestURL . "/size");
 
       return $this->extractValueFromJsonResponse($response);
    }
@@ -164,7 +164,7 @@ class WebElement extends WebDriverBase
     */
    public function getCssProperty($propertyName)
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/css/". $propertyName);
+      $response = $this->executeGET($this->requestURL . "/css/". $propertyName);
       return $this->extractValueFromJsonResponse($response);
    }
 
@@ -175,7 +175,7 @@ class WebElement extends WebDriverBase
     */
    public function isOtherId($otherId)
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/equals/".$otherId);
+      $response = $this->executeGET($this->requestURL . "/equals/".$otherId);
 
       return ($this->extractValueFromJsonResponse($response) == 'true');
    }
@@ -188,7 +188,7 @@ class WebElement extends WebDriverBase
     */
    public function getLocation()
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/location");
+      $response = $this->executeGET($this->requestURL . "/location");
 
       return $this->extractValueFromJsonResponse($response);
    }
@@ -201,7 +201,7 @@ class WebElement extends WebDriverBase
     */
    public function getLocationInView()
    {
-      $response = $this->execute_rest_request_GET($this->requestURL . "/location_in_view");
+      $response = $this->executeGET($this->requestURL . "/location_in_view");
 
       return $this->extractValueFromJsonResponse($response);
    }

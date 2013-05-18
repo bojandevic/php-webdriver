@@ -59,7 +59,7 @@ class Curl
     * @param string $postargs POST data
     * @return string $response Response from POST request
     */
-   protected function execute_rest_request_POST($request, $postargs)
+   protected function executePOST($request, $postargs)
    {
       $session = $this->curlInit($request);
 
@@ -71,7 +71,7 @@ class Curl
     * @param string $request URL REST request
     * @return string $response Response from GET request
     */
-   protected function execute_rest_request_GET($request)
+   protected function executeGET($request)
    {
       $session = $this->curlInit($request);
 
