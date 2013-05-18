@@ -33,7 +33,8 @@ class WebDriverException extends Exception
             'UNABLE_TO_SET_COOKIE'      => 'A request to set a cookie\'s value could not be satisfied.',
             'TIMEOUT'                   => 'A command did not complete before its timeout expired.');
 
-   public function __construct($message, $code, $previous = null) {
+   public function __construct($message, $code, $previous = null)
+   {
       parent::__construct($message, $code);
    }
 }

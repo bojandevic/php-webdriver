@@ -75,7 +75,7 @@ class Curl
    {
       $session = $this->curlInit($request);
 
-      return curl_exec($this->prepareGET($session));
+      return trim(curl_exec($this->prepareGET($session)));
    }
 }
 

@@ -86,10 +86,8 @@ class WebElement extends WebDriverBase
     */
    public function isSelected()
    {
-      $request = $this->requestURL . "/selected";
-      $response = $this->executeGET($request);
-      $isSelected = $this->extractValueFromJsonResponse($response);
-      return ($isSelected == 'true');
+      $response   = $this->executeGET($this->requestURL . "/selected");
+      return ($this->extractValueFromJsonResponse($response) == 'true');
    }
 
    /**
