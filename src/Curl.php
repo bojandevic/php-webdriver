@@ -2,7 +2,7 @@
 
 class Curl
 {
-	protected $requestURL;
+   protected $requestURL;
    protected $_curl;
 
    public function __construct($requestURL)
