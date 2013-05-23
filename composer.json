@@ -1,0 +1,20 @@
+{
+   "name": "bojandevic/php-webdriver",
+   "description": "PHP bindings for Web Driver",
+   "license": "Apache-2.0",
+   "authors": [
+      {
+         "name": "Bojan Dević",
+         "email": "bojan@bojandevic.com"
+      }
+   ],
+   "require": {
+      "php": ">=5.3",
+      "ext-curl": "*"
+   },
+   "autoload": {
+      "psr-0": {
+         "": "src/"
+        }
+    }
+}
