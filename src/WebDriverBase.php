@@ -1,6 +1,7 @@
 <?php
 
 require_once 'Curl.php';
+require_once 'WebDriverBase.php';
 require_once 'WebElement.php';
 require_once 'WebDriverException.php';
 
