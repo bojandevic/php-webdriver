@@ -7,7 +7,7 @@ class WebElement extends WebDriverBase
 
    public function __construct($parent, $element, $options)
    {
-      if (get_class($parent) == 'WebDriver')
+	   if (get_class($parent) == 'WebDriver')
          $root = $parent->requestURL;
       else
          $root = preg_replace("(/element/.*)", "", $parent->requestURL);

@@ -13,7 +13,8 @@ class WebDriver extends WebDriverBase
    const LOCATOR_TAG_NAME          = "tag name";
    const LOCATOR_XPATH             = "xpath";
 
-   public function __construct($host, $port) {
+   public function __construct($host, $port)
+   {
       parent::__construct("http://{$host}:{$port}/wd/hub");
    }
 
@@ -23,12 +24,13 @@ class WebDriver extends WebDriverBase
     * @param $version   The browser version, or the empty string if unknown.
     * @param $caps  array with capabilities see: http://code.google.com/p/selenium/wiki/JsonWireProtocol#/session
     */
-   public function connect($browserName = "firefox", $version = "", $caps = array()) {
+   public function connect($browserName = "firefox", $version = "", $caps = array())
+   {
       $session = $this->curlInit($this->requestURL . "/session");
 
       $allCaps = array_merge(array('javascriptEnabled' => true,
                                    'nativeEvents'      => false,
-                                   'browserName'       => $browserName
+                                   'browserName'       => $browserName,
                                    'version'           => $version),
                              $caps);
 
@@ -378,7 +380,7 @@ class WebDriver extends WebDriverBase
     */
    public function getScreenshot()
    {
-      $response = $this->executeGET($this->requestURL . "/screenshot";);
+      $response = $this->executeGET($this->requestURL . "/screenshot");
       return $this->extractValueFromJsonResponse($response);
    }
 
