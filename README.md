@@ -17,7 +17,7 @@ Example
    $webdriver->connect("firefox");                            
    $webdriver->get("http://google.com");
    $element = $webdriver->findElementBy(WebDriver::LOCATOR_NAME, "q");
-   $element->sendKeys(array("selenium google code" ) );
+   $element->sendKeys(array("webdriver" ) );
    $element->submit();
 
    $webdriver->close();
